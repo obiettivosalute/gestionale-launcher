@@ -2,8 +2,8 @@
 // Prima apertura: scarica e cachea (~1 sec una tantum)
 // Aperture successive: servito da cache (50-100ms) → redirect immediato
 
-const CACHE = 'launcher-v1';
-const CACHED = ['/', '/index.html', '/manifest.json', '/icon-192.png'];
+const CACHE = 'launcher-v2';
+const CACHED = ['/', '/index.html', '/manifest.json', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
