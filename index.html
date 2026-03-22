@@ -93,7 +93,7 @@
     <p class="subtitle">Gestionale Ortopedico</p>
     <div class="spinner" id="spinner"></div>
     <p class="status" id="status">Apertura gestionale...</p>
-    <a class="btn-open" id="btnOpen" href="http://10.0.88.95:5000/">Apri Gestionale</a>
+    <a class="btn-open" id="btnOpen" href="http://10.0.88.95:5000/" target="_blank" rel="noreferrer noopener">Apri Gestionale</a>
     <div class="install-hint" id="installHint">
         <strong>Installa come app:</strong><br>
         Android: menu ⋮ → "Installa app"<br>
@@ -115,10 +115,31 @@
             || window.navigator.standalone === true;
 
         if (isStandalone) {
-            // Installed PWA: redirect immediately
+            // PWA standalone: apri nel browser esterno per evitare blocco HTTPS→HTTP
+            // Usa un link con target=_blank per uscire dal webview HTTPS della PWA
             setTimeout(() => {
-                window.location.href = GESTIONALE_URL;
-            }, 800);
+                // Metodo 1: link invisibile con target=_blank
+                const a = document.createElement('a');
+                a.href = GESTIONALE_URL;
+                a.target = '_blank';
+                a.rel = 'noreferrer noopener';
+                document.body.appendChild(a);
+                a.click();
+
+                // Metodo 2 fallback: window.open
+                setTimeout(() => {
+                    window.open(GESTIONALE_URL, '_blank', 'noreferrer');
+                }, 500);
+
+                // Aggiorna UI dopo il tentativo
+                setTimeout(() => {
+                    document.getElementById('spinner').style.display = 'none';
+                    document.getElementById('status').textContent = 'Se non si è aperto, tocca il pulsante:';
+                    document.getElementById('btnOpen').style.display = 'inline-block';
+                    document.getElementById('btnOpen').target = '_blank';
+                    document.getElementById('btnOpen').rel = 'noreferrer noopener';
+                }, 1500);
+            }, 600);
         } else {
             // Browser mode: show install instructions
             document.getElementById('spinner').style.display = 'none';
@@ -132,7 +153,6 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            // Show custom install button
             const installBtn = document.createElement('button');
             installBtn.className = 'btn-open';
             installBtn.style.display = 'inline-block';
