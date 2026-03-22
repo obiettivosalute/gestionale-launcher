@@ -1,0 +1,24 @@
+{
+    "name": "Obiettivo Salute — Gestionale",
+    "short_name": "Gestionale OS",
+    "description": "Gestionale Ortopedico - Obiettivo Salute",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "orientation": "any",
+    "theme_color": "#1B4965",
+    "background_color": "#1B4965",
+    "icons": [
+        {
+            "src": "icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}
