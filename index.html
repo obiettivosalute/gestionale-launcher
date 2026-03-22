@@ -115,31 +115,18 @@
             || window.navigator.standalone === true;
 
         if (isStandalone) {
-            // PWA standalone: apri nel browser esterno per evitare blocco HTTPS→HTTP
-            // Usa un link con target=_blank per uscire dal webview HTTPS della PWA
+            // PWA standalone: redirect diretto
+            // Su Android, navigazione cross-origin da PWA apre Chrome automaticamente
             setTimeout(() => {
-                // Metodo 1: link invisibile con target=_blank
-                const a = document.createElement('a');
-                a.href = GESTIONALE_URL;
-                a.target = '_blank';
-                a.rel = 'noreferrer noopener';
-                document.body.appendChild(a);
-                a.click();
+                window.location.replace(GESTIONALE_URL);
+            }, 500);
 
-                // Metodo 2 fallback: window.open
-                setTimeout(() => {
-                    window.open(GESTIONALE_URL, '_blank', 'noreferrer');
-                }, 500);
-
-                // Aggiorna UI dopo il tentativo
-                setTimeout(() => {
-                    document.getElementById('spinner').style.display = 'none';
-                    document.getElementById('status').textContent = 'Se non si è aperto, tocca il pulsante:';
-                    document.getElementById('btnOpen').style.display = 'inline-block';
-                    document.getElementById('btnOpen').target = '_blank';
-                    document.getElementById('btnOpen').rel = 'noreferrer noopener';
-                }, 1500);
-            }, 600);
+            // Fallback: se dopo 3 secondi siamo ancora qui, mostra pulsante
+            setTimeout(() => {
+                document.getElementById('spinner').style.display = 'none';
+                document.getElementById('status').textContent = 'Tocca per aprire il gestionale:';
+                document.getElementById('btnOpen').style.display = 'inline-block';
+            }, 3000);
         } else {
             // Browser mode: show install instructions
             document.getElementById('spinner').style.display = 'none';
